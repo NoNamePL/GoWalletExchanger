@@ -1,0 +1,10 @@
+PHONY: generate-structs
+generate-structs:
+	cd ./pkg
+	protoc --go_out=. --go_opt=paths=source_relative \
+	api\gw-wallet-exchanger\service.proto \
+	--go-grpc_out=. \
+	--go-grpc_opt=paths=source_relative \
+	--experimental_allow_proto3_optional api\gw-wallet-exchanger\service.proto
+
+	

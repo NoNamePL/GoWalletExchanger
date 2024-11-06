@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package gw_wallet_exchanger;
+
+option go_package = "github.com/NoNamePL/GoWalletExchanger";
+
+service ExchangeService {
+    // Получение курсов обмена всех валют
+    rpc GetExchangeRates(Empty) returns (ExchangeRatesResponse);
+    
+    // Получение курса обмена для конкретной валюты
+    rpc GetExchangeRateForCurrency(CurrencyRequest) returns (ExchangeRateResponse);
+}
+
+// Запрос для получения курса обмена 
+message CurrencyRequest {
+    string from_currency = 1;
+    string to_currency = 2;
+}
+
+// Ответ с курсом обмена для определенной валюте
+message ExchangeRateResponse {
+    string from_currency = 1;
+    string to_currency = 2;
+    float rate = 3;
+}
+
+// Ответ с курсами валют
+message ExchangeRatesResponse {
+    map<string, float> rates = 1; // ключ: валюта, значение
+}
+
+// Пустое сообщение
+message Empty{}
