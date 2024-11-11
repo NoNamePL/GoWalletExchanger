@@ -59,7 +59,7 @@ func main() {
 	log.Println("Exchange Rate from %s to %s: %f",ratesResp.FromCurrency,ratesResp.ToCurrency,ratesResp.Rate)
 	
 
-	walhandlers.RegisterHandlers(router, db)
+	walhandlers.RegisterHandlers(router, db,&grpcClient)
 
 	router.Run()
 
@@ -88,13 +88,13 @@ type ClientServerObject struct {
 	pb.ExchangeServiceClient
 }
 
-func (cl *ClientServerObject) GetExchangeRates(ctx context.Context, in *pb.Empty) (*ExchangeRatesResponse, error) {
+func (cl *ClientServerObject) GetExchangeRates(ctx context.Context, in *pb.Empty) (*pb.ExchangeRatesResponse, error) {
 	return &pb.ExchangeRatesResponse{
 		Rates: map[string]float32{"test": 21.3},
 	}, nil
 }
 
-func (cl *ClientServerObject) GetExchangeRateForCurrency(ctx context.Context, in *pb.CurrencyRequest) (*ExchangeRateResponse, error) {
+func (cl *ClientServerObject) GetExchangeRateForCurrency(ctx context.Context, in *pb.CurrencyRequest) (*pb.ExchangeRateResponse, error) {
 	return &pb.ExchangeRateResponse{
 		FromCurrency: "EURO",
 		ToCurrency:   "KZT",

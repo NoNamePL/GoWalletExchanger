@@ -4,9 +4,20 @@ import (
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
 )
 
-func RegisterHandlers(router *gin.Engine, db *sql.DB) {
+type HandlerDB struct {
+	db *sql.DB
+	client *pb.ExchangeServiceClient
+}
+
+func RegisterHandlers(router *gin.Engine, db *sql.DB,grpcClient *pb.ExchangeServiceClient) {
+
+	h := HandlerDB {
+		db: db,
+		client: grpcClient,
+	}
 
 	router.Group("/api/v1")
 	go router.POST("/register",)
@@ -17,3 +28,4 @@ func RegisterHandlers(router *gin.Engine, db *sql.DB) {
 	go router.GET("/exchange/rates")
 	go router.POST("/exchange")
 }
+
