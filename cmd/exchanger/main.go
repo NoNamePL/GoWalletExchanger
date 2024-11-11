@@ -61,7 +61,7 @@ func main() {
 	db, err := postgres.ConnectDB(cfg)
 
 	// create grpc server on 9000 port
-	lis, err := net.Listen("tcp", ":9000")
+	lis, err := net.Listen("tcp", ":50001")
 	if err != nil {
 		log.Fatal(err)
 	}
