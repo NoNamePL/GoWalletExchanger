@@ -2,69 +2,82 @@ package main
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
-	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
 	walhandlers "github.com/NoNamePL/GoWalletExchanger/iternal/handlers/wallet"
-	"github.com/NoNamePL/GoWalletExchanger/iternal/storages/postgres"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/middleware/logger"
 	"github.com/gin-gonic/gin"
+	sloggin "github.com/samber/slog-gin"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	// start handler gin server
-	router := gin.Default()
+	// router := gin.Default()
+	router := gin.New()
 
-	// create config
-	cfg, err := config.NewConfig()
+	// create logger
+	logger, err := logger.InitLogger("REST-API")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("can't open/create/append to log file")
 	}
+
+	// create config file
+	// cfg, err := config.NewConfig()
+	// if err != nil {
+	// 	logger.Error(err.Error())
+	// 	os.Exit(1)
+	// }
+
+	router.Use(sloggin.New(logger))
+	router.Use(gin.Recovery())
 
 	// connect to DB
-	db, err := postgres.ConnectDB(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// db, err := postgres.ConnectDB(cfg)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	test := sql.DB{}
+
+	db := &test
 
 	// start grpc client
-	conn, err := grpc.Dial("localhost:50001",grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:50001", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("didn't connect to rpc: %v",err)
+		logger.Error("didn't connect to rpc: %v", err)
+		os.Exit(1)
 	}
 	defer conn.Close()
 
 	grpcClient := pb.NewExchangeServiceClient(conn)
 
-
 	// пример вызова GetExchangeRates
-	ctx,cancel := context.WithTimeout(context.Background(),time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	
-	rates,err := grpcClient.GetExchangeRates(ctx,&pb.Empty{})
+
+	rates, err := grpcClient.GetExchangeRates(ctx, &pb.Empty{})
 	if err != nil {
-		log.Fatalf("couldn't get rates: %v",err)
+		logger.Error("couldn't get rates:","error", err)
 	}
-	log.Printf("Exchange Rates: %v", rates.Rates)
+	logger.Info("Exchange Rates: ","string" ,rates.Rates)
 
 	// Пример вызова GetExchangeRateForCurrency
 	currencyReq := &pb.CurrencyRequest{FromCurrency: "USD", ToCurrency: "EUR"}
-	ratesResp,err := grpcClient.GetExchangeRateForCurrency(ctx,currencyReq)
+	ratesResp, err := grpcClient.GetExchangeRateForCurrency(ctx, currencyReq)
 	if err != nil {
-		log.Fatalf("couldn't get exchange rate: %v", err)
+		logger.Error("couldn't get exchange rate:","error", err)
 	}
-	log.Println("Exchange Rate from %s to %s: %f",ratesResp.FromCurrency,ratesResp.ToCurrency,ratesResp.Rate)
-	
+	logger.Info(fmt.Sprintf("Exchange Rate from %s to %s: %f", ratesResp.FromCurrency, ratesResp.ToCurrency, ratesResp.Rate))
 
-	walhandlers.RegisterHandlers(router, db,&grpcClient)
+	walhandlers.RegisterHandlers(router, db, &grpcClient)
 
 	router.Run()
-
-
-
 
 	// // create grpc server
 	// grpcServer := grpc.NewServer()

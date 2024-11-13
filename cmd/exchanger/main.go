@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"log"
+	"database/sql"
 	"net"
+	"os"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
-	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
-	"github.com/NoNamePL/GoWalletExchanger/iternal/storages/postgres"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/middleware/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -16,6 +16,7 @@ import (
 
 type ExchangeService struct {
 	pb.UnimplementedExchangeServiceServer
+	db *sql.DB
 }
 
 func (ex *ExchangeService) GetExchangeRates(ctx context.Context, in *pb.Empty) (*pb.ExchangeRatesResponse, error) {
@@ -53,28 +54,49 @@ func (ex *ExchangeService) GetExchangeRateForCurrency(ctx context.Context, req *
 }
 
 func main() {
-	cfg, err := config.NewConfig()
+
+	// create logger
+	logger, err := logger.InitLogger("GRPC")
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 
-	db, err := postgres.ConnectDB(cfg)
+	// create config file
+	// cfg, err := config.NewConfig()
+	// if err != nil {
+	// 	logger.Error(err.Error())
+	// 	os.Exit(1)
+	//
+
+	// connect to DB
+	// db, err := postgres.ConnectDB(cfg)
+	// if err != nil {
+	// 	logger.Error("can't connect to db")
+	// 	os.Exit(1)
+	// }
+
+	test := sql.DB{}
+
+	db := &test
 
 	// create grpc server on 9000 port
 	lis, err := net.Listen("tcp", ":50001")
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("can't start grpc server")
+		os.Exit(1)
 	}
 
 	grpcServer := grpc.NewServer()
 
 	reflection.Register(grpcServer)
 
-	pb.RegisterExchangeServiceServer(grpcServer, &ExchangeService{})
+	pb.RegisterExchangeServiceServer(grpcServer, &ExchangeService{db: db})
 
 	err = grpcServer.Serve(lis)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
 
 	// conn,err :=grpc.NewClient("localhost:50051",grpc.WithInsecure())

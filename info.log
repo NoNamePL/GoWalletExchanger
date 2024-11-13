@@ -1,0 +1,23 @@
+{"time":"2024-11-13T16:04:15.3133284+03:00","level":"INFO","msg":"Service %s========================\nInfo message","!BADKEY":"GRPC"}
+{"time":"2024-11-13T16:04:15.3446581+03:00","level":"WARN","msg":"Service %s========================\nWarning message","!BADKEY":"GRPC"}
+{"time":"2024-11-13T16:04:15.3451934+03:00","level":"ERROR","msg":"Service %s========================\nError message","!BADKEY":"GRPC"}
+{"time":"2024-11-13T16:05:00.3002848+03:00","level":"INFO","msg":"Service %s========================\nInfo message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:05:00.3327075+03:00","level":"WARN","msg":"Service %s========================\nWarning message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:05:00.3327075+03:00","level":"ERROR","msg":"Service %s========================\nError message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:05:00.3447092+03:00","level":"INFO","msg":"Exchange Rates: %v","!BADKEY":{"EUR":0.85,"JPY":110,"USD":1}}
+{"time":"2024-11-13T16:08:15.3446165+03:00","level":"INFO","msg":"Service %s========================\nInfo message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:08:15.3760712+03:00","level":"WARN","msg":"Service %s========================\nWarning message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:08:15.3760712+03:00","level":"ERROR","msg":"Service %s========================\nError message","!BADKEY":"REST-API"}
+{"time":"2024-11-13T16:08:15.3860829+03:00","level":"ERROR","msg":"couldn't get rates: %v","!BADKEY":"rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp [::1]:50001: connectex: No connection could be made because the target machine actively refused it.\""}
+{"time":"2024-11-13T16:26:57.0409827+03:00","level":"INFO","msg":"Service REST-API========================\nInfo message"}
+{"time":"2024-11-13T16:26:57.0741283+03:00","level":"WARN","msg":"Service REST-API========================\nWarning message"}
+{"time":"2024-11-13T16:26:57.0741283+03:00","level":"ERROR","msg":"Service REST-API========================\nError message"}
+{"time":"2024-11-13T16:26:57.0848757+03:00","level":"ERROR","msg":"couldn't get rates: %v","!BADKEY":"rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp [::1]:50001: connectex: No connection could be made because the target machine actively refused it.\""}
+{"time":"2024-11-13T17:35:21.3261534+03:00","level":"INFO","msg":"Service GRPC======================== Info message"}
+{"time":"2024-11-13T17:35:21.3577429+03:00","level":"WARN","msg":"Service GRPC======================== Warning message"}
+{"time":"2024-11-13T17:35:21.3582591+03:00","level":"ERROR","msg":"Service GRPC======================== Error message"}
+{"time":"2024-11-13T17:35:35.4161444+03:00","level":"INFO","msg":"Service REST-API======================== Info message"}
+{"time":"2024-11-13T17:35:35.4500806+03:00","level":"WARN","msg":"Service REST-API======================== Warning message"}
+{"time":"2024-11-13T17:35:35.4500806+03:00","level":"ERROR","msg":"Service REST-API======================== Error message"}
+{"time":"2024-11-13T17:35:35.4669403+03:00","level":"INFO","msg":"Exchange Rates: ","string":{"EUR":0.85,"JPY":110,"USD":1}}
+{"time":"2024-11-13T17:35:35.4675656+03:00","level":"INFO","msg":"Exchange Rate from USD to EUR: 0.850000"}
