@@ -21,3 +21,12 @@
 {"time":"2024-11-13T17:35:35.4500806+03:00","level":"ERROR","msg":"Service REST-API======================== Error message"}
 {"time":"2024-11-13T17:35:35.4669403+03:00","level":"INFO","msg":"Exchange Rates: ","string":{"EUR":0.85,"JPY":110,"USD":1}}
 {"time":"2024-11-13T17:35:35.4675656+03:00","level":"INFO","msg":"Exchange Rate from USD to EUR: 0.850000"}
+{"time":"2024-11-16T16:09:04.9136228+03:00","level":"INFO","msg":"Service GRPC======================== Info message"}
+{"time":"2024-11-16T16:09:05.1442266+03:00","level":"WARN","msg":"Service GRPC======================== Warning message"}
+{"time":"2024-11-16T16:09:05.1442266+03:00","level":"ERROR","msg":"Service GRPC======================== Error message"}
+{"time":"2024-11-16T16:09:14.1454025+03:00","level":"INFO","msg":"Service GRPC======================== Info message"}
+{"time":"2024-11-16T16:09:14.1932044+03:00","level":"WARN","msg":"Service GRPC======================== Warning message"}
+{"time":"2024-11-16T16:09:14.1942041+03:00","level":"ERROR","msg":"Service GRPC======================== Error message"}
+{"time":"2024-11-16T16:09:28.6338305+03:00","level":"INFO","msg":"Service REST-API======================== Info message"}
+{"time":"2024-11-16T16:09:28.6701908+03:00","level":"WARN","msg":"Service REST-API======================== Warning message"}
+{"time":"2024-11-16T16:09:28.6701908+03:00","level":"ERROR","msg":"Service REST-API======================== Error message"}

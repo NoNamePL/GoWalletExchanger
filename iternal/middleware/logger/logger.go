@@ -17,6 +17,8 @@ func InitLogger(service string) (*slog.Logger, error) {
 		return nil, err
 	}
 
+	defer file.Close()
+
 	logger := slog.New(slog.NewJSONHandler(io.MultiWriter(file, os.Stdout), nil))
 
 	logger.Debug(fmt.Sprintf("Service %s======================== Debug message", service))

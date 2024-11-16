@@ -26,6 +26,8 @@ func (ex *ExchangeService) GetExchangeRates(ctx context.Context, in *pb.Empty) (
 		"JPY": 110.0,
 	}
 
+	// ex.db.Query()
+
 	return &pb.ExchangeRatesResponse{Rates: rates}, nil
 }
 

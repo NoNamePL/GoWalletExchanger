@@ -63,15 +63,15 @@ func main() {
 
 	rates, err := grpcClient.GetExchangeRates(ctx, &pb.Empty{})
 	if err != nil {
-		logger.Error("couldn't get rates:","error", err)
+		logger.Error("couldn't get rates:", "error", err)
 	}
-	logger.Info("Exchange Rates: ","string" ,rates.Rates)
+	logger.Info("Exchange Rates: ", "string", rates.Rates)
 
 	// Пример вызова GetExchangeRateForCurrency
 	currencyReq := &pb.CurrencyRequest{FromCurrency: "USD", ToCurrency: "EUR"}
 	ratesResp, err := grpcClient.GetExchangeRateForCurrency(ctx, currencyReq)
 	if err != nil {
-		logger.Error("couldn't get exchange rate:","error", err)
+		logger.Error("couldn't get exchange rate:", "error", err)
 	}
 	logger.Info(fmt.Sprintf("Exchange Rate from %s to %s: %f", ratesResp.FromCurrency, ratesResp.ToCurrency, ratesResp.Rate))
 
@@ -97,20 +97,20 @@ func main() {
 
 }
 
-type ClientServerObject struct {
-	pb.ExchangeServiceClient
-}
+// type ClientServerObject struct {
+// 	pb.ExchangeServiceClient
+// }
 
-func (cl *ClientServerObject) GetExchangeRates(ctx context.Context, in *pb.Empty) (*pb.ExchangeRatesResponse, error) {
-	return &pb.ExchangeRatesResponse{
-		Rates: map[string]float32{"test": 21.3},
-	}, nil
-}
+// func (cl *ClientServerObject) GetExchangeRates(ctx context.Context, in *pb.Empty) (*pb.ExchangeRatesResponse, error) {
+// 	return &pb.ExchangeRatesResponse{
+// 		Rates: map[string]float32{"test": 21.3},
+// 	}, nil
+// }
 
-func (cl *ClientServerObject) GetExchangeRateForCurrency(ctx context.Context, in *pb.CurrencyRequest) (*pb.ExchangeRateResponse, error) {
-	return &pb.ExchangeRateResponse{
-		FromCurrency: "EURO",
-		ToCurrency:   "KZT",
-		Rate:         21.4,
-	}, nil
-}
+// func (cl *ClientServerObject) GetExchangeRateForCurrency(ctx context.Context, in *pb.CurrencyRequest) (*pb.ExchangeRateResponse, error) {
+// 	return &pb.ExchangeRateResponse{
+// 		FromCurrency: "EURO",
+// 		ToCurrency:   "KZT",
+// 		Rate:         21.4,
+// 	}, nil
+// }
