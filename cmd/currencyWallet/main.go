@@ -9,7 +9,7 @@ import (
 	"time"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
-	walhandlers "github.com/NoNamePL/GoWalletExchanger/iternal/handlers/wallet"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/handlers/wallet/walhandlers"
 	"github.com/NoNamePL/GoWalletExchanger/iternal/middleware/logger"
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
@@ -75,7 +75,7 @@ func main() {
 	}
 	logger.Info(fmt.Sprintf("Exchange Rate from %s to %s: %f", ratesResp.FromCurrency, ratesResp.ToCurrency, ratesResp.Rate))
 
-	walhandlers.RegisterHandlers(router, db, &grpcClient)
+	walhandlers.RegisterHandlers(router, db, &grpcClient, logger)
 
 	router.Run()
 

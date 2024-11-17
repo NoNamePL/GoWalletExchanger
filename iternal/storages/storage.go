@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"log/slog"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,7 @@ type DataBase interface {
 	Exchange(ctx *gin.Context)
 	SetDB(db *sql.DB)
 	SetClient(client *pb.ExchangeServiceClient)
+	SetLogger(logger *slog.Logger)
 }
 
 type CurrencyRequest struct {
