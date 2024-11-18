@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,6 +35,7 @@ type DataBase interface {
 	SetDB(db *sql.DB)
 	SetClient(client *pb.ExchangeServiceClient)
 	SetLogger(logger *slog.Logger)
+	SetConfig(cfg *config.Config)
 }
 
 type CurrencyRequest struct {

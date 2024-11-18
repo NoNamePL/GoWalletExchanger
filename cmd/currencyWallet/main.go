@@ -9,6 +9,7 @@ import (
 	"time"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
 	"github.com/NoNamePL/GoWalletExchanger/iternal/handlers/wallet/walhandlers"
 	"github.com/NoNamePL/GoWalletExchanger/iternal/middleware/logger"
 	"github.com/gin-gonic/gin"
@@ -28,11 +29,11 @@ func main() {
 	}
 
 	// create config file
-	// cfg, err := config.NewConfig()
-	// if err != nil {
-	// 	logger.Error(err.Error())
-	// 	os.Exit(1)
-	// }
+	cfg, err := config.NewConfig()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
 
 	router.Use(sloggin.New(logger))
 	router.Use(gin.Recovery())
@@ -75,7 +76,7 @@ func main() {
 	}
 	logger.Info(fmt.Sprintf("Exchange Rate from %s to %s: %f", ratesResp.FromCurrency, ratesResp.ToCurrency, ratesResp.Rate))
 
-	walhandlers.RegisterHandlers(router, db, &grpcClient, logger)
+	walhandlers.RegisterHandlers(router, db, &grpcClient, logger,cfg)
 
 	router.Run()
 

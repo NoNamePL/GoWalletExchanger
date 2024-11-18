@@ -8,9 +8,6 @@ import (
 
 	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
 )
-type PostrgresDB struct {
-	db *sql.DB
-}
 
 func ConnectDB(cfg *config.Config) (*sql.DB, error) {
 	// Connected to DB
@@ -21,11 +18,26 @@ func ConnectDB(cfg *config.Config) (*sql.DB, error) {
 		log.Fatal(err)
 	}
 
-	// Creating base tables in the database
+	// create user table
 	stmt, err := db.Prepare(`
+		CREATE TABLE IF NOT EXISTS user (
+			userID SERIAL PRIMARY KEY,
+			username TEXT NOT NULL,
+			password TEXT NOT NULL,
+		)
+	`)
+
+	_, err = stmt.Exec()
+	if err != nil {
+		return nil, errors.New("can't create user table")
+	}
+
+	// Creating base tables in the database
+	stmt, err = db.Prepare(`
 		CREATE TABLE IF NOT EXISTS wallet(
-			valletId uuid UNIQUE NOT NULL DEFAULT gen_random_uuid(),
-    		amount INT
+			walletId SERIAL PRIMARY KEY,
+    		amount INT,
+			userID INT REFERENCES user (userID),
 		)
 	`)
 
@@ -38,19 +50,39 @@ func ConnectDB(cfg *config.Config) (*sql.DB, error) {
 		return nil, errors.New("can't create wallet table")
 	}
 
-	// Create index
+	// create table exchange
 	stmt, err = db.Prepare(`
-		CREATE UNIQUE INDEX IF NOT EXISTS valIdx on wallet (valletId)
+		CREATE TABLE IF NOT EXISTS exchange(
+			exchangeId SERIAL PRIMARY KEY,
+			currency TEXT NOT NULL,
+			rate INT NOT NULL,
+		)
 	`)
 
 	if err != nil {
-		return nil, errors.New("can't prepere query of wallet table")
+		return nil, errors.New("can't prepere query of exchange table")
 	}
 
 	_, err = stmt.Exec()
 	if err != nil {
-		return nil, errors.New("can't create index")
+		return nil, errors.New("can't create exchange table")
 	}
+
+	
+
+	// // Create index
+	// stmt, err = db.Prepare(`
+	// 	CREATE UNIQUE INDEX IF NOT EXISTS valIdx on wallet (valletId)
+	// `)
+
+	// if err != nil {
+	// 	return nil, errors.New("can't prepere query of wallet table")
+	// }
+
+	// _, err = stmt.Exec()
+	// if err != nil {
+	// 	return nil, errors.New("can't create index")
+	// }
 
 	return db, nil
 }

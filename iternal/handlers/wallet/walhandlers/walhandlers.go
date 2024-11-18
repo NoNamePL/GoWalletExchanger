@@ -5,12 +5,13 @@ import (
 	"log/slog"
 
 	pb "github.com/NoNamePL/GoWalletExchanger/api/gw-wallet-exchanger"
+	"github.com/NoNamePL/GoWalletExchanger/iternal/config"
 	storage "github.com/NoNamePL/GoWalletExchanger/iternal/storages"
 	"github.com/NoNamePL/GoWalletExchanger/iternal/storages/postgres"
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterHandlers(router *gin.Engine, db *sql.DB, grpcClient *pb.ExchangeServiceClient, logger *slog.Logger) {
+func RegisterHandlers(router *gin.Engine, db *sql.DB, grpcClient *pb.ExchangeServiceClient, logger *slog.Logger, cfg *config.Config) {
 
 	var h storage.DataBase
 
@@ -19,6 +20,7 @@ func RegisterHandlers(router *gin.Engine, db *sql.DB, grpcClient *pb.ExchangeSer
 	h.SetLogger(logger)
 	h.SetDB(db)
 	h.SetClient(grpcClient)
+	h.SetConfig(cfg)
 
 	router.Group("/api/v1")
 	go router.POST("/register", h.Register)
