@@ -47,7 +47,7 @@ func (h *HandlerDB) Exchange(ctx *gin.Context) {
 // getBalance implements storage.DataBase.
 func (h *HandlerDB) GetBalance(ctx *gin.Context) {
 	// Prepere query for select amount from BD
-	stmt, err := h.db.Prepare("SELECT amount FROM wallet WHERE valletId = ($1)")
+	stmt, err := h.db.Prepare("SELECT amount FROM wallet WHERE username = ($1)")
 
 	if err != nil {
 		h.logger.Error("can't prepere db query")
@@ -57,10 +57,15 @@ func (h *HandlerDB) GetBalance(ctx *gin.Context) {
 
 	var resBalance string
 
-	ctx.
+	userName, ok := ctx.Params.Get("user")
+	if !ok {
+		h.logger.Error("can't get balance")
+		queryerror.WrongQuery(ctx)
+		return
+	}
 
-		// Excecute query and write result into variable
-		err = stmt.QueryRow(id).Scan(&resBalance)
+	// Excecute query and write result into variable
+	err = stmt.QueryRow(userName).Scan(&resBalance)
 	if errors.Is(err, sql.ErrNoRows) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"Status": "not row in db",
@@ -100,12 +105,15 @@ func (h *HandlerDB) Login(ctx *gin.Context) {
 
 	// Excecute query and write result into variable
 	err = stmt.QueryRow(user.Username).Scan(&password)
+
+	ok := utils.CompareHashPassword(user.Password, password)
+
 	if errors.Is(err, sql.ErrNoRows) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"Status": "not user in db",
 		})
 		return
-	} else if user.Password != user.Password {
+	} else if !ok {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"Status": "uncorrect password",
 		})
@@ -136,6 +144,7 @@ func (h *HandlerDB) Login(ctx *gin.Context) {
 		return
 	}
 
+	ctx.Params = append(ctx.Params, gin.Param{Key: "user", Value: user.Username})
 	ctx.JSON(http.StatusOK, gin.H{"token": tokenString})
 
 }

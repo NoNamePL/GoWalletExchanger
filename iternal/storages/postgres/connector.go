@@ -37,7 +37,7 @@ func ConnectDB(cfg *config.Config) (*sql.DB, error) {
 		CREATE TABLE IF NOT EXISTS wallet(
 			walletId SERIAL PRIMARY KEY,
     		amount INT,
-			userID INT REFERENCES user (userID),
+			username UNIQUE TEXT REFERENCES user (username),
 		)
 	`)
 
